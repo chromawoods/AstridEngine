@@ -1,0 +1,20 @@
+{
+  "name": "astrid-engine",
+  "version": "0.0.0",
+  "description": "Create point-and-click games for the web using JSON files.",
+  "homepage": "https://github.com/chromawoods/AstridEngine",
+  "author": {
+    "name": "Andreas Weber",
+    "email": "andreas@chromawoods.com",
+    "url": "http://chromawoods.com"
+  },
+  "license": "SEE LICENSE IN LICENSE",
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-clean-css": "^3.10.0",
+    "gulp-concat": "^2.6.1",
+    "gulp-less": "^4.0.1",
+    "gulp-sourcemaps": "^2.6.4",
+    "gulp-uglify-es": "^1.0.4"
+  }
+}
