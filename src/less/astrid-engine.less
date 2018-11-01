@@ -1,5 +1,8 @@
-@darkOpacity: rgba(0, 0, 0, .8);
+@defaultSceneWidth: 800px;
+@defaultSceneHeight: 640px;
 
+@darkOpacity: rgba(0, 0, 0, .8);
+@lightOpacity: rgba(255, 255, 255, .8);
 
 .astrid, .astrid * {
   box-sizing: border-box;
@@ -8,119 +11,129 @@
   text-shadow: 0 0 2px #000;
 }
 
-.astrid .main-scene {
-  display: block;
-  position: relative;
-  width: 800px;
-  height: 640px;
-  margin: 3rem auto;
-  overflow: hidden;
-  font-size: 1rem;
-  background-color: #000;
-  cursor: none;
-  z-index: 10;
-}
+.astrid {
 
-.astrid .custom-cursor {
-  position: absolute;
-  display: inline-block;
-  pointer-events: none;
-  z-index: 80;
-}
+  .main-scene {
+    display: block;
+    position: relative;
+    width: @defaultSceneWidth;
+    height: @defaultSceneHeight;
+    margin: 3rem auto;
+    overflow: hidden;
+    font-size: 1rem;
+    background-color: #000;
+    cursor: none;
+    z-index: 10;
 
-.astrid .custom-cursor .cursor-icon {
-  position: relative;
-  top: -4px;
-  right: -16px;
-  max-width: 24px;
-}
+    .scene-state {
+      width: 100%;
+      height: 100%;
+      background-position: center center;
+      background-repeat: no-repeat;
+      background-size: cover;
+      z-index: 20;
+    }
 
-.astrid .main-scene .scene-state {
-  width: 100%;
-  height: 100%;
-  background-position: center center;
-  background-repeat: no-repeat;
-  background-size: cover;
-  z-index: 20;
-}
+  }
+  
+  .custom-cursor {
+    position: absolute;
+    display: inline-block;
+    pointer-events: none;
+    z-index: 80;
+  
+    .cursor-icon {
+      position: relative;
+      top: -4px;
+      right: -16px;
+      max-width: 24px;
+    }
+    
+  }
 
-.astrid .info-bar {
-  position: absolute;
-  top: 2%;
-  left: 0;
-  width: 100%;
-  text-align: center;
-}
-
-.astrid .info-message {
-  display: inline-block;
-  padding: 6px 12px;
-  color: #fff;
-  background-color: @darkOpacity;
-  border-radius: 8px;
-}
-
-.astrid .dialog-panel {
-  position: absolute;
-  width: 60%;
-  max-height: 120px;
-  padding: 10px 14px;
-  margin: 0 auto;
-  top: 50%;
-  left: 0;
-  right: 0;
-  overflow-y: auto;
-  color: #ccf;
-  line-height: 1.5rem;
-  background-color: @darkOpacity;
-  border-radius: 8px;
-}
-
-.astrid .interactions-panel {
-  position: absolute;
-  bottom: 0;
-  right: 0;
-}
-
-.astrid .interaction-icon {
-  display: inline-block;
-  margin: 4px 6px 4px 0;
-  width: 40px;
-  height: 40px;
-  background-color: @darkOpacity;
-  background-position: center center;
-  background-repeat: no-repeat;
-  background-size: 60%;
-  border-radius: 99rem;
-  transition: background-color .2s;
-}
-
-.astrid .interaction-icon.selected {
-  background-color: rgba(255, 255, 255, .8)
-}
-
-.astrid .inventory-panel {
-  width: 400px;
-  height: 80px;
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  overflow-y: auto;
-  background-color: rgba(255, 255, 255, .8);
-}
-
-.astrid .scene-item {
-  position: absolute;
-  display: inline-block;
-}
-
-.astrid .scene-portal {
-  position: absolute;
-}
-
-.astrid .scene-item.is-inventory {
-  position: static;
-  width: 40px !important;
-  height: 40px !important;
-  margin: 5px;
+  .info-bar {
+    position: absolute;
+    top: 2%;
+    left: 0;
+    width: 100%;
+    text-align: center;
+  
+    .info-message {
+      display: inline-block;
+      padding: 6px 12px;
+      color: #fff;
+      background-color: @darkOpacity;
+      border-radius: 8px;
+    }
+  
+  }
+  
+  .dialog-panel {
+    position: absolute;
+    width: 60%;
+    max-height: 120px;
+    padding: 10px 14px;
+    margin: 0 auto;
+    top: 50%;
+    left: 0;
+    right: 0;
+    overflow-y: auto;
+    color: #ccf;
+    line-height: 1.5rem;
+    background-color: @darkOpacity;
+    border-radius: 8px;
+  }
+  
+  .interactions-panel {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+  
+    .interaction-icon {
+      display: inline-block;
+      margin: 4px 6px 4px 0;
+      width: 40px;
+      height: 40px;
+      background-color: @darkOpacity;
+      background-position: center center;
+      background-repeat: no-repeat;
+      background-size: 60%;
+      border-radius: 99rem;
+      transition: background-color .2s;
+  
+      &.selected {
+        background-color: @lightOpacity;
+      }
+  
+    }
+  
+  }
+  
+  .inventory-panel {
+    width: 400px;
+    height: 80px;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    overflow-y: auto;
+    background-color: @lightOpacity;
+  }
+  
+  .scene-item {
+    position: absolute;
+    display: inline-block;
+  
+    &.is-inventory {
+      position: static;
+      width: 40px !important;
+      height: 40px !important;
+      margin: 5px;
+    }
+  
+  }
+  
+  .scene-portal {
+    position: absolute;
+  }
+  
 }
