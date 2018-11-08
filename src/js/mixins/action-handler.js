@@ -10,6 +10,13 @@ AE.actionHandler = {
         'collectItem',
         'printMessageFromKey', 
         'playSound'
+      ],
+      allowedActionMethods: [
+        'combineItems',
+        'use',
+        'look',
+        'speak',
+        'enterState'
       ]
     };
   },
@@ -213,13 +220,28 @@ AE.actionHandler = {
     },
 
 
+    onStateLoaded: function(state) {
+
+      let action = this.getAction('enterState', state.id);
+
+      if (action) {
+        this.executeActionResults(action);
+      }
+
+    },
+
+
     onAction: function() {
 
       let args = [].slice.call(arguments);
       let eventId = args.shift();
 
-      this.log('action event:', eventId);
-      this[eventId].apply(this, args);
+      if (this.allowedActionMethods.indexOf(eventId) >= 0) {
+        this.log('action event:', eventId);
+        this[eventId].apply(this, args);
+      } else {
+        this.throwWarning('illegal action', eventId);
+      }
 
     },
 
@@ -252,6 +274,7 @@ AE.actionHandler = {
   mounted: function() {
     AE.eventBus.$on('action', this.onAction);
     AE.eventBus.$on('item-interaction', this.onItemInteraction);
+    AE.eventBus.$on('state-loaded', this.onStateLoaded);
   }
 
 };

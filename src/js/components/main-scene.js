@@ -68,6 +68,7 @@ Vue.component('main-scene', {
 
     },
 
+
     getStatePortals: function(state) {
 
       const portals = [];
@@ -87,6 +88,7 @@ Vue.component('main-scene', {
 
     },
 
+
     loadState: function(state) {
 
       this.log('load state', state);
@@ -97,7 +99,10 @@ Vue.component('main-scene', {
       this.state = state;
       this.$refs.state && this.$refs.state.load();
 
+      AE.eventBus.$emit('state-loaded', state);
+
     },
+
 
     unloadCurrentState: function(onComplete) {
 
@@ -107,6 +112,7 @@ Vue.component('main-scene', {
       onComplete.apply(this);
 
     },
+
 
     enterPortal: function(destination) {
 
@@ -125,27 +131,33 @@ Vue.component('main-scene', {
 
     },
 
+
     getInventory: function() {
       return this.$_.where(this.items, { inventory: true });
     },
+
 
     showInfoMessage: function(message) {
       this.infoMessage = message;
     },
 
+
     clearInfoMessage: function() {
       this.infoMessage = null;
     },
 
+
     onInteractionChosen: function(newInteraction) {
       this.currentInteraction = newInteraction;
     },
+
 
     onMouseMove: function(event) {
       const x = event.pageX - this.$el.offsetLeft;
       const y = event.pageY - this.$el.offsetTop;
       AE.eventBus.$emit('cursor-move', x, y);
     },
+
 
     onMouseOut: function() {
       AE.eventBus.$emit('hide-custom-cursor');
