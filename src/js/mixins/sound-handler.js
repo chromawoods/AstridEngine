@@ -2,11 +2,13 @@ AE.soundHandler = {
 
   data: function() {
     return {
-      path: AE.store.config.soundsDir,
+      soundPath: AE.store.config.soundsDir,
+      musicPath: AE.store.config.musicDir,
       sounds: {
         global: [],
         state: []
-      }
+      },
+      currentMusic: { name: false, howl: false }
     };
   },
 
@@ -14,13 +16,13 @@ AE.soundHandler = {
 
 
     loadHowlSounds: function(scope, sounds) {
-console.log(arguments);
-      this.sounds[scope] = this.$_.map(sounds, function(sound) {
 
-        let src = this.path + sound;
+      this.sounds[scope] = this.$_.map(sounds, function(soundName) {
+
+        const src = this.soundPath + soundName;
 
         return {
-          sound: sound,
+          name: soundName,
           howl: new AE.Howl({ src: src })
         };
 
@@ -35,7 +37,6 @@ console.log(arguments);
 
 
     loadStateSounds: function(sounds) {
-      console.log("helo!");
       this.loadHowlSounds('state', sounds);
     },
 
@@ -49,28 +50,79 @@ console.log(arguments);
     },
 
 
-    playHowlSound: function(scope, sound) {
+    getSoundObject: function(scope, soundName) {
+      return this.$_.findWhere(this.sounds[scope], { name: soundName });
+    },
 
-      this.log('play ' + scope + ' sound', sound);
-console.log(this.sounds);
-      let soundObj = this.$_.findWhere(this.sounds[scope], { sound: sound });
+
+    playHowlSound: function(soundObj) {
+
+      this.log('play sound', soundObj.name);
 
       if (soundObj) {
         soundObj.howl.play();
       } else {
-        this.throwError('Invalid ' + scope + ' sound: ' + sound);
+        this.throwError('Invalid sound: ' + soundObj.name);
       }
 
     },
 
 
-    playStateSound: function(sound) {
-      this.playHowlSound('state', sound);
+    unloadMusic: function() {
+
+      if (this.currentMusic.howl) {
+        this.currentMusic.howl.unload();
+        this.currentMusic.name = false;
+      }
+
     },
 
 
-    playGlobalSound: function(sound) {
-      this.playHowlSound('global', sound);
+    stopMusic: function() {
+
+      if (this.currentMusic.howl && this.currentMusic.howl.playing()) {
+        this.currentMusic.howl.stop();
+      }
+
+      return this;
+
+    },
+
+
+    playMusic: function(musicName) {
+
+      if (this.currentMusic.name !== musicName) {
+
+        const src = this.musicPath + musicName;
+
+        this.unloadMusic();
+        
+        this.currentMusic = {
+          name: musicName,
+          howl: new Howl({
+            src: src,
+            loop: true
+          })
+        };
+
+        this.log('play music', this.currentMusic);
+
+        this.playHowlSound(this.currentMusic);
+
+      }
+      
+    },
+
+
+    playStateSound: function(soundName) {
+      const soundObj = this.getSoundObject('state', soundName);
+      this.playHowlSound(soundObj);
+    },
+
+
+    playGlobalSound: function(soundName) {
+      const soundObj = this.getSoundObject('global', soundName);
+      this.playHowlSound(soundObj);
     }
 
 

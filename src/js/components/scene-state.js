@@ -6,7 +6,7 @@ Vue.component('scene-state', {
       background: '',
       items: [],
       portals: [],
-      soundIds: []
+      soundFilenames: []
     }
   },
 
@@ -22,7 +22,7 @@ Vue.component('scene-state', {
 
   },
   
-  props: ['id', 'items', 'portals', 'soundIds', 'background'],
+  props: ['id', 'items', 'portals', 'soundFilenames', 'background', 'musicFilename'],
 
   mixins: [AE.soundHandler],
 
@@ -69,8 +69,12 @@ Vue.component('scene-state', {
 
     loadSounds: function() {
 
-      if (this.soundIds && this.soundIds.length) {
-        this.loadStateSounds(this.soundIds);
+      if (this.soundFilenames && this.soundFilenames.length) {
+        this.loadStateSounds(this.soundFilenames);
+      }
+
+      if (this.musicFilename) {
+        this.playMusic(this.musicFilename);
       }
 
     },

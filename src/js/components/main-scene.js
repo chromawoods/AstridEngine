@@ -31,7 +31,8 @@ Vue.component('main-scene', {
         :id="state.id"
         :items="state.items"
         :portals="state.portals"
-        :soundIds="state.sounds"
+        :soundFilenames="state.sounds"
+        :musicFilename="state.music"
         :background="state.background">
       </scene-state>
       
