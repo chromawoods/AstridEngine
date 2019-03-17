@@ -9,7 +9,8 @@ AE.actionHandler = {
         'unhideItem',
         'collectItem',
         'printMessageFromKey', 
-        'playSound'
+        'playSound',
+        'delay'
       ],
       allowedActionMethods: [
         'combineItems',
@@ -103,28 +104,38 @@ AE.actionHandler = {
     },
 
 
-    executeActionResults: function(action) {
+    executeActionResults: function(action, resultIndex) {
 
-      action.results.forEach(res => {
+      resultIndex = resultIndex || 0;
 
-        res = res.split(':');
+      const currentResult = action.results[resultIndex].split(':');
+      const resultFnName = currentResult.shift();
+      const self = this;
 
-        let fn = res.shift();
-
-        if (this.allowedResultMethods.indexOf(fn) >= 0) {
-          this[fn].apply(this, res[0].split(','));
-        } else {
-          this.throwWarning('result method not allowed', fn);
+      function checkActionMilestone() {
+        if (action.reachMilestone) {
+          let milestones = AE.store.milestones;
+          milestones = milestones || [];
+          milestones.push(action.reachMilestone);
         }
-        
-      });
+      }
 
-      if (action.reachMilestone) {
+      function nextResult() {
+        resultIndex += 1;
+        if (resultIndex >= action.results.length) {
+          checkActionMilestone();
+        } else {
+          self.executeActionResults(action, resultIndex)
+        }
+      }
 
-        let milestones = AE.store.milestones;
-
-        milestones = milestones || [];
-        milestones.push(action.reachMilestone);
+      if (this.allowedResultMethods.indexOf(resultFnName) >= 0) {
+        if (resultFnName !== 'delay') {
+          this[resultFnName].apply(this, currentResult[0].split(','));
+          nextResult();
+        } else {
+          setTimeout(nextResult, currentResult[0]);
+        }
 
       }
 
