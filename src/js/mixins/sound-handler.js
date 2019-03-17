@@ -91,7 +91,7 @@ AE.soundHandler = {
 
     playMusic: function(musicName) {
 
-      if (this.currentMusic.name !== musicName) {
+      if (AE.store.config.gameOptions.musicOn && this.currentMusic.name !== musicName) {
 
         const src = this.musicPath + musicName;
 
@@ -115,14 +115,22 @@ AE.soundHandler = {
 
 
     playStateSound: function(soundName) {
-      const soundObj = this.getSoundObject('state', soundName);
-      this.playHowlSound(soundObj);
+
+      if (AE.store.config.gameOptions.soundOn) {
+        const soundObj = this.getSoundObject('state', soundName);
+        this.playHowlSound(soundObj);
+      }
+
     },
 
 
     playGlobalSound: function(soundName) {
-      const soundObj = this.getSoundObject('global', soundName);
-      this.playHowlSound(soundObj);
+
+      if (AE.store.config.gameOptions.soundOn) {
+        const soundObj = this.getSoundObject('global', soundName);
+        this.playHowlSound(soundObj);
+      }
+
     }
 
 
