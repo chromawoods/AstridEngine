@@ -130,6 +130,7 @@ AE.actionHandler = {
       }
 
       if (this.allowedResultMethods.indexOf(resultFnName) >= 0) {
+        
         if (resultFnName !== 'delay') {
           this[resultFnName].apply(this, currentResult[0].split(','));
           nextResult();
@@ -166,7 +167,7 @@ AE.actionHandler = {
 
       if (scope) {
         for (let i = 0; i < scope.length; i++) {
-          if (this.hasArrayDiff(scope[i].trigger.split(','), trigger) === false) {
+          if (_.difference(scope[i].trigger.split(','), trigger).length === 0) {
             action = scope[i];
             break;
           }

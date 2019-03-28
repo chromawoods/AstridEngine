@@ -14,24 +14,6 @@ AE.util = {
         return undefined;
       }
 
-    },
-
-    hasArrayDiff: function(arr1, arr2) {
-
-      let isDiff = false;
-
-      if (arr1.length === arr2.length) {
-        arr1.forEach((element, index) => {
-          if (element !== arr2[index]) {
-            isDiff = true;
-          }
-        });
-      } else {
-        isDiff = true;
-      }
-
-      return isDiff;
-
     }
 
   }
