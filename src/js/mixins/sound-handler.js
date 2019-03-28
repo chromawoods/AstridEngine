@@ -82,6 +82,7 @@ AE.soundHandler = {
 
       if (this.currentMusic.howl && this.currentMusic.howl.playing()) {
         this.currentMusic.howl.stop();
+        this.currentMusic.name = false;
       }
 
       return this;

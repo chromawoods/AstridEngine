@@ -2,7 +2,7 @@ Vue.component('interaction-icon', {
   
   props: ['description', 'id', 'image'],
 
-  data: function() {
+  data: () => {
     return {
       classes: { 
         'interaction-icon': true,
@@ -31,16 +31,12 @@ Vue.component('interaction-icon', {
     <div 
       :style="cssBackground"
       :class="classes"
-      @click="onClick"
+      @click="() => $emit('interaction-clicked', this)"
       @mouseenter="onMouseEnter"
       @mouseout="onMouseOut"></div>
   `,
 
   methods: {
-
-    onClick: function() {
-      this.$emit('interaction-clicked', this);
-    },
 
     onInteractionChosen: function(interaction) {
       this.classes.selected = (this.id === interaction);

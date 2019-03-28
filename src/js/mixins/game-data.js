@@ -44,7 +44,7 @@
     fetchEngineData: function(onComplete) {
 
       const entities = ['config', 'states', 'items', 'translations', 'interactions', 'actions'];
-      const self = this;
+      const savedData = this.getSavedGameData();
 
       let engineData = {};
       let numFetched = 0;
@@ -53,7 +53,7 @@
         engineData[key] = data;
         numFetched += 1;
         if (numFetched === entities.length) {
-          onComplete.apply(this, [_.extend(engineData, self.getSavedGameData())]);
+          onComplete.apply(this, [_.deepExtend(engineData, savedData)]);
         }
       }
   
@@ -61,7 +61,7 @@
   
         getJson(this.getJsonDataPath() + el + '.json').then(function(jsonData) {
           if (jsonData && typeof rootScope.AE_DATA === 'object' && AE_DATA.hasOwnProperty(el)) {
-            jsonData = _.extend(jsonData, rootScope.AE_DATA[el]);
+            jsonData = _.deepExtend(jsonData, rootScope.AE_DATA[el]);
           }
           onEntityFetched(el, jsonData);
         });
@@ -71,9 +71,26 @@
     },
 
 
-    saveGameData: function() {
+    saveGameData: function(dataToSave) {
 
-      localStorage.setItem('AE_SAVE_DATA', JSON.stringify(_unsavedData));
+      dataToSave = dataToSave || _unsavedData;
+      
+      localStorage.setItem('AE_SAVE_DATA', JSON.stringify(dataToSave));
+
+    },
+
+
+    saveGameOption: function(optionData) {
+
+      const dataToSave = this.getSavedGameData();
+
+      dataToSave.config = dataToSave.config || {};
+      dataToSave.config.gameOptions = dataToSave.config.gameOptions || {};
+      dataToSave.config.gameOptions[optionData.key] = optionData.value;
+
+      _.deepExtend(AE.store.config.gameOptions, { [optionData.key]: optionData.value });
+
+      this.saveGameData(dataToSave);
 
     },
 
@@ -86,6 +103,8 @@
       AE.eventBus.$on('state-loaded', state => {
         _unsavedData.currentState = state.id;
       });
+
+      AE.eventBus.$on('option-changed', this.saveGameOption.bind(this));
 
     }
 

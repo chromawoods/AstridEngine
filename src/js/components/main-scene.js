@@ -9,23 +9,34 @@ Vue.component('main-scene', {
       portals: AE.store.items.portalsList,
       interactions: AE.store.interactions,
       actions: AE.store.actions,
+      gameOptions: AE.store.config.gameOptions,
       defaultStateStyle: {
         width: '100%',
         height: '100%'
       },
       state: {},
-      infoMessage: ''
+      infoMessage: '',
+      shouldShowOptions: false
     };
+  },
+
+  computed: {
+
+    cssClasses: function() {
+      return 'main-scene ' + this.currentInteraction + (this.shouldShowOptions ? ' show-options' : '');
+    }
+
   },
 
   mixins: [AE.util, AE.actionHandler],
 
   template: `
-    <div :class="'main-scene ' + currentInteraction" 
+    <div :class="cssClasses" 
       @mousemove="onMouseMove"
       @mouseout="onMouseOut">
 
       <custom-cursor></custom-cursor>
+      <options-state :options="gameOptions"></options-state>
 
       <scene-state ref="state"
         :id="state.id"
@@ -42,7 +53,7 @@ Vue.component('main-scene', {
           <span class="info-message" v-if="infoMessage">{{infoMessage}}<span>
         </div>
 
-        <interactions-panel :interactions="interactions"></interactions-panel>
+        <interactions-panel :interactions="interactions" :options="gameOptions"></interactions-panel>
 
         <inventory-panel :items="inventory"></inventory-panel>
         
@@ -143,6 +154,16 @@ Vue.component('main-scene', {
     },
 
 
+    showOptions: function() {
+      this.shouldShowOptions = true;
+    },
+
+
+    closeOptions: function() {
+      this.shouldShowOptions = false;
+    },
+
+
     clearInfoMessage: function() {
       this.infoMessage = null;
     },
@@ -168,20 +189,22 @@ Vue.component('main-scene', {
 
   beforeMount: function() {
 
-    const defaultState = this.$_.findWhere(this.states, { id: AE.store.states.default });
+    const currentState = this.$_.findWhere(this.states, { id: AE.store.currentState || AE.store.states.default });
 
     this.inventory = this.getInventory();
 
-    if (defaultState) {
-      this.loadState(defaultState);
+    if (currentState) {
+      this.loadState(currentState);
     } else {
-      this.throwError('Invalid default state', defaultState);
+      this.throwError('Invalid initial state', currentState);
     }
 
     AE.eventBus.$on('interaction-chosen', this.onInteractionChosen);
     AE.eventBus.$on('show-info-message', this.showInfoMessage);
     AE.eventBus.$on('hide-info-message', this.clearInfoMessage);
     AE.eventBus.$on('enter-portal', this.enterPortal);
+    AE.eventBus.$on('show-options', this.showOptions);
+    AE.eventBus.$on('close-options', this.closeOptions);
 
   }
 

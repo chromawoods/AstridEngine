@@ -2,11 +2,12 @@ Vue.component('interactions-panel', {
 
   data: () => {
     return {
+      options: {},
       interactions: {}
     };
   },
 
-  props: ['interactions'],
+  props: ['interactions', 'options'],
 
   methods: {
 
@@ -22,7 +23,7 @@ Vue.component('interactions-panel', {
     getClasses: function(i) {
       return i.classes;
     }
-    
+
   },
 
   template: `
@@ -35,6 +36,14 @@ Vue.component('interactions-panel', {
         :class="interaction.id"
         :description="interaction.description"
         v-on:interaction-clicked="interactionChosen(interaction)">
+      </interaction-icon>
+
+      <interaction-icon 
+        v-if="options.showOptionsIcon"
+        :id="'options'"
+        :image="'options.svg'"
+        :class="'options'"
+        v-on:interaction-clicked="AE.eventBus.$emit('show-options')">
       </interaction-icon>
 
     </div>

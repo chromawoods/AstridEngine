@@ -10,6 +10,7 @@ Vue.component('scene-state', {
     }
   },
 
+
   computed: {
 
     backgroundSrc: function() {
@@ -22,9 +23,12 @@ Vue.component('scene-state', {
 
   },
   
+
   props: ['id', 'items', 'portals', 'soundFilenames', 'background', 'musicFilename'],
 
+
   mixins: [AE.soundHandler],
+
 
   template: `
     <div 
@@ -61,6 +65,7 @@ Vue.component('scene-state', {
     </div>
   `,
 
+
   methods: {
 
     unload: function() {
@@ -86,13 +91,30 @@ Vue.component('scene-state', {
     rerender: function() {
       AE.eventBus.$emit('hide-info-message');
       this.$forceUpdate();
+    },
+
+    onOptionChanged: function(optionData) {
+
+      if (optionData.key === 'musicOn') {
+
+        if (optionData.value === true) {
+          this.playMusic(this.musicFilename);
+        } else {
+          this.stopMusic();
+        }
+
+      }
+
     }
 
   },
 
+
   beforeMount: function() {
     AE.eventBus.$on('rerender-state', this.rerender.bind(this));
+    AE.eventBus.$on('option-changed', this.onOptionChanged.bind(this));
   },
+
 
   mounted: function() {
     this.load();

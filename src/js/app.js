@@ -2,6 +2,17 @@
 
   AE = rootScope.AE || {};
 
+  rootScope._.deepExtend = function(target, source) {
+    for (let prop in source) {
+        if (prop in target && typeof(target[prop]) == 'object' && typeof(source[prop]) == 'object') {
+          rootScope._.deepExtend(target[prop], source[prop]);
+        } else {
+            target[prop] = source[prop];
+        }
+    }
+    return target;
+  };
+
   function startEngine(engineData) {
 
     // Add UnderscoreJS to Vue
