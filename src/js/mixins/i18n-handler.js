@@ -15,7 +15,7 @@ AE.i18n = {
 
       if (this.translations.hasOwnProperty(this.language)) {
         let message = this.getAttrFromString(path, this.translations[this.language]) || '';
-        this.log("translate key:", [path, message]);
+        this.log('translate key:', [path, message]);
         return message;
       } else {
         this.throwError('unknown language: ', this.language);

@@ -39,7 +39,7 @@ Vue.component('options-state', {
   template: `
     <div class="options-state">
       <span class="close-symbol" @click="() => AE.eventBus.$emit('close-options')"></span>
-      <h1>{{translate('options.mainTitle')}}</h1>
+      <h1 class="options-state-title">{{translate('options.mainTitle')}}</h1>
 
       <game-option
         v-for="renderOpt in optionsToRender" 

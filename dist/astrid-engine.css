@@ -71,6 +71,22 @@
   opacity: 0;
   transition: opacity 0.3s;
 }
+.astrid .options-state .options-state-title {
+  margin: 2rem 0;
+  text-align: center;
+}
+.astrid .options-state .option-container {
+  padding: 1rem;
+  margin: 0 10% 0.2rem;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+.astrid .options-state .option-container .option-title,
+.astrid .options-state .option-container .option-input {
+  display: inline-block;
+}
+.astrid .options-state .option-container .option-input {
+  float: right;
+}
 .astrid .info-bar {
   position: absolute;
   top: 2%;
