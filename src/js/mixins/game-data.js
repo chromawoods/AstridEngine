@@ -10,7 +10,26 @@
   }
 
 
-  const _unsavedData = {};
+  const _defaultSaveData = {
+    config: {
+      gameOptions: {}
+    },
+    states: {},
+    items: {
+      itemsList: [],
+      portalsList: []
+    },
+    actions: {
+      combineItems: [],
+      use: [],
+      look: [],
+      speak: [],
+      enterState: []
+    }
+  };
+
+
+  let _unsavedData = null;
 
 
   AE.gameData = {
@@ -20,7 +39,7 @@
 
       const savedData = rootScope.localStorage.getItem('AE_SAVE_DATA');
 
-      return savedData ? JSON.parse(savedData) : {};
+      return savedData ? JSON.parse(savedData) : _defaultSaveData;
 
     },
 
@@ -44,7 +63,6 @@
     fetchEngineData: function(onComplete) {
 
       const entities = ['config', 'states', 'items', 'translations', 'interactions', 'actions'];
-      const savedData = this.getSavedGameData();
 
       let engineData = {};
       let numFetched = 0;
@@ -53,10 +71,12 @@
         engineData[key] = data;
         numFetched += 1;
         if (numFetched === entities.length) {
-          onComplete.apply(this, [_.deepExtend(engineData, savedData)]);
+          onComplete.apply(this, [_.deepExtend(engineData, _unsavedData)]);
         }
       }
   
+      _unsavedData = this.getSavedGameData();
+
       entities.forEach(el => {
   
         getJson(this.getJsonDataPath() + el + '.json').then(function(jsonData) {
@@ -74,7 +94,7 @@
     saveGameData: function(dataToSave) {
 
       dataToSave = dataToSave || _unsavedData;
-      
+      AE.app.log('saving game data', dataToSave);
       localStorage.setItem('AE_SAVE_DATA', JSON.stringify(dataToSave));
 
     },
@@ -84,8 +104,7 @@
 
       const dataToSave = this.getSavedGameData();
 
-      dataToSave.config = dataToSave.config || {};
-      dataToSave.config.gameOptions = dataToSave.config.gameOptions || {};
+      dataToSave.config = dataToSave.config || { gameOptions: {}};
       dataToSave.config.gameOptions[optionData.key] = optionData.value;
 
       _.deepExtend(AE.store.config.gameOptions, { [optionData.key]: optionData.value });
@@ -95,15 +114,33 @@
     },
 
 
+    onActionChanged: function(scope, action) {
+
+      const existingActionIndex = _.findIndex(_unsavedData.actions[scope], existing => { existing.trigger === action.trigger });
+
+      AE.app.log('action changed', arguments);
+
+      if (existingActionIndex >= 0) {
+        _unsavedData.actions[scope][existingActionIndex] = action;
+      } else {
+        _unsavedData.actions[scope].push(action);
+      }
+
+    },
+
+
+    onStateLoaded: function(state) {
+      _unsavedData.currentState = state.id;
+    },
+
+
     /**
      * This method is invoked from app.js, just after the event bus has been created.
      */
     addEventHandlers: function() {
 
-      AE.eventBus.$on('state-loaded', state => {
-        _unsavedData.currentState = state.id;
-      });
-
+      AE.eventBus.$on('state-loaded', this.onStateLoaded);
+      AE.eventBus.$on('action-changed', this.onActionChanged);
       AE.eventBus.$on('option-changed', this.saveGameOption.bind(this));
 
     }

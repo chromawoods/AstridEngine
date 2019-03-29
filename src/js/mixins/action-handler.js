@@ -104,7 +104,7 @@ AE.actionHandler = {
     },
 
 
-    executeActionResults: function(action, resultIndex) {
+    executeActionResults: function(action, scope, resultIndex) {
 
       resultIndex = resultIndex || 0;
 
@@ -124,12 +124,16 @@ AE.actionHandler = {
         resultIndex += 1;
         if (resultIndex >= action.results.length) {
           checkActionMilestone();
+          if (action.triggerOnce) {
+            action.isDeactivated = true;
+            AE.eventBus.$emit('action-changed', scope, action);
+          }
         } else {
-          self.executeActionResults(action, resultIndex)
+          self.executeActionResults(action, scope, resultIndex)
         }
       }
 
-      if (this.allowedResultMethods.indexOf(resultFnName) >= 0) {
+      if (!action.isDeactivated && this.allowedResultMethods.indexOf(resultFnName) >= 0) {
         
         if (resultFnName !== 'delay') {
           this[resultFnName].apply(this, currentResult[0].split(','));
@@ -184,7 +188,7 @@ AE.actionHandler = {
       let action = this.getAction('combineItems', itemIds);
 
       if (action) {
-        this.executeActionResults(action);
+        this.executeActionResults(action, 'combineItems');
       } else {
         AE.eventBus.$emit('print-message', this.translate('actions.default'));
       }
@@ -237,7 +241,7 @@ AE.actionHandler = {
       let action = this.getAction('enterState', state.id);
 
       if (action) {
-        this.executeActionResults(action);
+        this.executeActionResults(action, 'enterState');
       }
 
     },
@@ -267,7 +271,7 @@ AE.actionHandler = {
         let action = this.getAction(interaction, item.id);
 
         if (action && !item.inventory) {
-          this.executeActionResults(action);
+          this.executeActionResults(action, this.currentInteraction);
         }
         else if (interaction === 'use' && item.collectable) {
           this.collectItem(item.id);

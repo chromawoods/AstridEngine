@@ -36,12 +36,6 @@ Vue.component('options-state', {
 
   },
 
-  methods: {
-    onOptionChanged: function() {
-      console.log(arguments);
-    }
-  },
-
   template: `
     <div class="options-state">
       <span class="close-symbol" @click="() => AE.eventBus.$emit('close-options')"></span>
