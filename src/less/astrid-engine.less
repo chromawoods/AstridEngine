@@ -12,13 +12,10 @@
   font-family: 'Fjalla One', sans-serif;
   color: #fff;
   text-shadow: 0 0 2px #000;
+  cursor: none;
 }
 
 .astrid {
-
-  * {
-    cursor: none;
-  }
 
   button {
     padding: .5rem 1rem;
@@ -28,7 +25,7 @@
     transition: background-color .2s;
 
     &:hover {
-      background-color: rgba(255, 255, 255, .2);
+      background-color: rgba(255, 255, 255, .05);
     }
 
     &.prominent {
@@ -119,6 +116,12 @@
     height: @checkboxHeight;
     border: 1px solid @lightOpacity;
     border-radius: 3px;
+    background-color: @darkOpacity;
+    transition: background-color .2s;
+
+    &:hover {
+      background-color: rgba(255, 255, 255, .05);
+    }
 
     input {
       display: none;

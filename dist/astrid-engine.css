@@ -4,8 +4,6 @@
   font-family: 'Fjalla One', sans-serif;
   color: #fff;
   text-shadow: 0 0 2px #000;
-}
-.astrid * {
   cursor: none;
 }
 .astrid button {
@@ -16,7 +14,7 @@
   transition: background-color 0.2s;
 }
 .astrid button:hover {
-  background-color: rgba(255, 255, 255, 0.2);
+  background-color: rgba(255, 255, 255, 0.05);
 }
 .astrid button.prominent {
   font-size: 1rem;
@@ -85,6 +83,11 @@
   height: 24px;
   border: 1px solid rgba(255, 255, 255, 0.8);
   border-radius: 3px;
+  background-color: rgba(0, 0, 0, 0.8);
+  transition: background-color 0.2s;
+}
+.astrid .custom-checkbox:hover {
+  background-color: rgba(255, 255, 255, 0.05);
 }
 .astrid .custom-checkbox input {
   display: none;
