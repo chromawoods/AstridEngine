@@ -38,13 +38,16 @@ Vue.component('options-state', {
 
   template: `
     <div class="options-state">
-      <span class="close-symbol" @click="() => AE.eventBus.$emit('close-options')"></span>
       <h1 class="options-state-title">{{translate('options.mainTitle')}}</h1>
 
       <game-option
         v-for="renderOpt in optionsToRender" 
         :option-data="renderOpt">
       </game-option>
+
+      <button class="prominent centered return-to-game" @click="() => AE.eventBus.$emit('close-options')">
+        {{translate('options.returnToGame')}}
+      </button>
 
     </div>
   `

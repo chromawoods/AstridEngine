@@ -5,10 +5,28 @@
   color: #fff;
   text-shadow: 0 0 2px #000;
 }
-.astrid input,
-.astrid select,
-.astrid textarea {
+.astrid * {
   cursor: none;
+}
+.astrid button {
+  padding: 0.5rem 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  border-radius: 3px;
+  background-color: rgba(0, 0, 0, 0.8);
+  transition: background-color 0.2s;
+}
+.astrid button:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+.astrid button.prominent {
+  font-size: 1rem;
+  padding: 1rem 2rem;
+}
+.astrid button.centered {
+  display: block;
+  width: auto;
+  margin-left: auto;
+  margin-right: auto;
 }
 .astrid .close-symbol {
   padding: 2rem;
@@ -61,6 +79,29 @@
   right: -16px;
   max-width: 24px;
 }
+.astrid .custom-checkbox {
+  display: block;
+  width: 24px;
+  height: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  border-radius: 3px;
+}
+.astrid .custom-checkbox input {
+  display: none;
+}
+.astrid .custom-checkbox input:checked + .custom-checkbox-dummy {
+  opacity: 1;
+}
+.astrid .custom-checkbox .custom-checkbox-dummy {
+  position: relative;
+  top: -1px;
+  color: #ccf;
+  line-height: 24px;
+  text-align: center;
+  font-weight: bold;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
 .astrid .options-state {
   width: 100%;
   height: 100%;
@@ -86,6 +127,9 @@
 }
 .astrid .options-state .option-container .option-input {
   float: right;
+}
+.astrid .options-state .return-to-game {
+  margin-top: 2rem;
 }
 .astrid .info-bar {
   position: absolute;
