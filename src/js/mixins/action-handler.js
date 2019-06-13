@@ -113,10 +113,8 @@ AE.actionHandler = {
       const self = this;
 
       function checkActionMilestone() {
-        if (action.reachMilestone) {
-          let milestones = AE.store.milestones;
-          milestones = milestones || [];
-          milestones.push(action.reachMilestone);
+        if (action.reachMilestone && AE.store.milestones.indexOf(action.reachMilestone) === -1) {
+          AE.store.milestones.push(action.reachMilestone);
         }
       }
 

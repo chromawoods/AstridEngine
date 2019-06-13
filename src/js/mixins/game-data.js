@@ -25,7 +25,8 @@
       look: [],
       speak: [],
       enterState: []
-    }
+    },
+    milestones: []
   };
 
 
@@ -71,6 +72,7 @@
         engineData[key] = data;
         numFetched += 1;
         if (numFetched === entities.length) {
+          engineData.milestones = [];
           onComplete.apply(this, [_.deepExtend(engineData, _unsavedData)]);
         }
       }
